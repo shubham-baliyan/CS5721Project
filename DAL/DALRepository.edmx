@@ -1,0 +1,563 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="db_SportsArenaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Arena">
+          <Key>
+            <PropertyRef Name="ArenaId" />
+          </Key>
+          <Property Name="ArenaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArenaName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OpeningTime" Type="time" Precision="0" Nullable="false" />
+          <Property Name="ClosingTime" Type="time" Precision="0" Nullable="false" />
+          <Property Name="Capacity" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Booking">
+          <Key>
+            <PropertyRef Name="BookingId" />
+          </Key>
+          <Property Name="BookingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="ArenaId" Type="int" Nullable="false" />
+          <Property Name="SlotId" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="MembershipTypeId" Type="int" Nullable="false" />
+          <Property Name="DocumentLink" Type="varchar" MaxLength="50" />
+          <Property Name="MembershipStartTime" Type="datetime" />
+          <Property Name="MembershipEndTime" Type="datetime" />
+          <Property Name="MembershipStatus" Type="bit" Nullable="false" />
+		  <Property Name="CustomerType" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MembershipType">
+          <Key>
+            <PropertyRef Name="MembershipTypeId" />
+          </Key>
+          <Property Name="MembershipTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MembershipTypeName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="MembershipFees" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Slot">
+          <Key>
+            <PropertyRef Name="SlotId" />
+          </Key>
+          <Property Name="SlotId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArenaId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="StartTime" Type="time" Precision="0" Nullable="false" />
+          <Property Name="EndTime" Type="time" Precision="0" Nullable="false" />
+          <Property Name="Capacity" Type="int" Nullable="false" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" />
+		  <Property Name="AvailableCapacity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="StaffId" />
+          </Key>
+          <Property Name="StaffId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="JoiningDate" Type="datetime" Nullable="false" />
+          <Property Name="WorkingStartTime" Type="time" Precision="0" Nullable="false" />
+          <Property Name="WorkingEndTime" Type="time" Precision="0" Nullable="false" />
+         
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="10" />
+          <Property Name="LastName" Type="varchar" MaxLength="10" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Username" Type="varchar" MaxLength="50" />
+          <Property Name="Contact" Type="varchar" MaxLength="15" />
+          <Property Name="Password" Type="varchar" MaxLength="10" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="UserType" Type="varchar" MaxLength="10" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="10" />
+		 <Property Name="IsApproved" Type="bit" Nullable="false" />
+			
+        </EntityType>
+        <Association Name="FK_Booking_Arena">
+          <End Role="Arena" Type="Self.Arena" Multiplicity="1" />
+          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Arena">
+              <PropertyRef Name="ArenaId" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="ArenaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Booking_Slot">
+          <End Role="Slot" Type="Self.Slot" Multiplicity="1" />
+          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slot">
+              <PropertyRef Name="SlotId" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="SlotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Booking_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_MembershipType">
+          <End Role="MembershipType" Type="Self.MembershipType" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MembershipType">
+              <PropertyRef Name="MembershipTypeId" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="MembershipTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slot_Arena">
+          <End Role="Arena" Type="Self.Arena" Multiplicity="1" />
+          <End Role="Slot" Type="Self.Slot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Arena">
+              <PropertyRef Name="ArenaId" />
+            </Principal>
+            <Dependent Role="Slot">
+              <PropertyRef Name="ArenaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Staff_UserId">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="db_SportsArenaModelStoreContainer">
+          <EntitySet Name="Arena" EntityType="Self.Arena" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MembershipType" EntityType="Self.MembershipType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Slot" EntityType="Self.Slot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Booking_Arena" Association="Self.FK_Booking_Arena">
+            <End Role="Arena" EntitySet="Arena" />
+            <End Role="Booking" EntitySet="Booking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Booking_Slot" Association="Self.FK_Booking_Slot">
+            <End Role="Slot" EntitySet="Slot" />
+            <End Role="Booking" EntitySet="Booking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Booking_User" Association="Self.FK_Booking_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Booking" EntitySet="Booking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_MembershipType" Association="Self.FK_Customer_MembershipType">
+            <End Role="MembershipType" EntitySet="MembershipType" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_User" Association="Self.FK_Customer_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slot_Arena" Association="Self.FK_Slot_Arena">
+            <End Role="Arena" EntitySet="Arena" />
+            <End Role="Slot" EntitySet="Slot" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Staff_UserId" Association="Self.FK_Staff_UserId">
+            <End Role="User" EntitySet="User" />
+            <End Role="Staff" EntitySet="Staff" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="db_SportsArenaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Arena">
+          <Key>
+            <PropertyRef Name="ArenaId" />
+          </Key>
+          <Property Name="ArenaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArenaName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OpeningTime" Type="Time" Nullable="false" Precision="0" />
+          <Property Name="ClosingTime" Type="Time" Nullable="false" Precision="0" />
+          <Property Name="Capacity" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Bookings" Relationship="Self.FK_Booking_Arena" FromRole="Arena" ToRole="Booking" />
+          <NavigationProperty Name="Slots" Relationship="Self.FK_Slot_Arena" FromRole="Arena" ToRole="Slot" />
+        </EntityType>
+        <EntityType Name="Booking">
+          <Key>
+            <PropertyRef Name="BookingId" />
+          </Key>
+          <Property Name="BookingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="ArenaId" Type="Int32" Nullable="false" />
+          <Property Name="SlotId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Arena" Relationship="Self.FK_Booking_Arena" FromRole="Booking" ToRole="Arena" />
+          <NavigationProperty Name="Slot" Relationship="Self.FK_Booking_Slot" FromRole="Booking" ToRole="Slot" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Booking_User" FromRole="Booking" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="MembershipTypeId" Type="Int32" Nullable="false" />
+          <Property Name="DocumentLink" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MembershipStartTime" Type="DateTime" Precision="3" />
+          <Property Name="MembershipEndTime" Type="DateTime" Precision="3" />
+          <Property Name="MembershipStatus" Type="Boolean" Nullable="false" />
+			<Property Name="CustomerType" Type="String" MaxLength="10" Nullable="false" />
+          <NavigationProperty Name="MembershipType" Relationship="Self.FK_Customer_MembershipType" FromRole="Customer" ToRole="MembershipType" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Customer_User" FromRole="Customer" ToRole="User" />
+        </EntityType>
+        <EntityType Name="MembershipType">
+          <Key>
+            <PropertyRef Name="MembershipTypeId" />
+          </Key>
+          <Property Name="MembershipTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MembershipTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="MembershipFees" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customers" Relationship="Self.FK_Customer_MembershipType" FromRole="MembershipType" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="Slot">
+          <Key>
+            <PropertyRef Name="SlotId" />
+          </Key>
+          <Property Name="SlotId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArenaId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StartTime" Type="Time" Nullable="false" Precision="0" />
+          <Property Name="EndTime" Type="Time" Nullable="false" Precision="0" />
+          <Property Name="Capacity" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+		  <Property Name="AvailableCapacity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Arena" Relationship="Self.FK_Slot_Arena" FromRole="Slot" ToRole="Arena" />
+          <NavigationProperty Name="Bookings" Relationship="Self.FK_Booking_Slot" FromRole="Slot" ToRole="Booking" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="StaffId" />
+          </Key>
+          <Property Name="StaffId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="JoiningDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="WorkingStartTime" Type="Time" Nullable="false" Precision="0" />
+          <Property Name="WorkingEndTime" Type="Time" Nullable="false" Precision="0" />
+         
+          <NavigationProperty Name="User" Relationship="Self.FK_Staff_UserId" FromRole="Staff" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contact" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="UserType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+		  <Property Name="IsApproved" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Bookings" Relationship="Self.FK_Booking_User" FromRole="User" ToRole="Booking" />
+          <NavigationProperty Name="Customers" Relationship="Self.FK_Customer_User" FromRole="User" ToRole="Customer" />
+          <NavigationProperty Name="Staffs" Relationship="Self.FK_Staff_UserId" FromRole="User" ToRole="Staff" />
+        </EntityType>
+        <Association Name="FK_Booking_Arena">
+          <End Role="Arena" Type="Self.Arena" Multiplicity="1" />
+          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Arena">
+              <PropertyRef Name="ArenaId" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="ArenaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Slot_Arena">
+          <End Role="Arena" Type="Self.Arena" Multiplicity="1" />
+          <End Role="Slot" Type="Self.Slot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Arena">
+              <PropertyRef Name="ArenaId" />
+            </Principal>
+            <Dependent Role="Slot">
+              <PropertyRef Name="ArenaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Booking_Slot">
+          <End Role="Slot" Type="Self.Slot" Multiplicity="1" />
+          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Slot">
+              <PropertyRef Name="SlotId" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="SlotId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Booking_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Booking">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_MembershipType">
+          <End Role="MembershipType" Type="Self.MembershipType" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MembershipType">
+              <PropertyRef Name="MembershipTypeId" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="MembershipTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Staff_UserId">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SportsArenaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Arenas" EntityType="Self.Arena" />
+          <EntitySet Name="Bookings" EntityType="Self.Booking" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="MembershipTypes" EntityType="Self.MembershipType" />
+          <EntitySet Name="Slots" EntityType="Self.Slot" />
+          <EntitySet Name="Staffs" EntityType="Self.Staff" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Booking_Arena" Association="Self.FK_Booking_Arena">
+            <End Role="Arena" EntitySet="Arenas" />
+            <End Role="Booking" EntitySet="Bookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Slot_Arena" Association="Self.FK_Slot_Arena">
+            <End Role="Arena" EntitySet="Arenas" />
+            <End Role="Slot" EntitySet="Slots" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Booking_Slot" Association="Self.FK_Booking_Slot">
+            <End Role="Slot" EntitySet="Slots" />
+            <End Role="Booking" EntitySet="Bookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Booking_User" Association="Self.FK_Booking_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Booking" EntitySet="Bookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_MembershipType" Association="Self.FK_Customer_MembershipType">
+            <End Role="MembershipType" EntitySet="MembershipTypes" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_User" Association="Self.FK_Customer_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Staff_UserId" Association="Self.FK_Staff_UserId">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Staff" EntitySet="Staffs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="db_SportsArenaModelStoreContainer" CdmEntityContainer="SportsArenaEntities">
+          <EntitySetMapping Name="Arenas">
+            <EntityTypeMapping TypeName="db_SportsArenaModel.Arena">
+              <MappingFragment StoreEntitySet="Arena">
+                <ScalarProperty Name="ArenaId" ColumnName="ArenaId" />
+                <ScalarProperty Name="ArenaName" ColumnName="ArenaName" />
+                <ScalarProperty Name="OpeningTime" ColumnName="OpeningTime" />
+                <ScalarProperty Name="ClosingTime" ColumnName="ClosingTime" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bookings">
+            <EntityTypeMapping TypeName="db_SportsArenaModel.Booking">
+              <MappingFragment StoreEntitySet="Booking">
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ArenaId" ColumnName="ArenaId" />
+                <ScalarProperty Name="SlotId" ColumnName="SlotId" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="db_SportsArenaModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="MembershipTypeId" ColumnName="MembershipTypeId" />
+                <ScalarProperty Name="DocumentLink" ColumnName="DocumentLink" />
+                <ScalarProperty Name="MembershipStartTime" ColumnName="MembershipStartTime" />
+                <ScalarProperty Name="MembershipEndTime" ColumnName="MembershipEndTime" />
+                <ScalarProperty Name="MembershipStatus" ColumnName="MembershipStatus" />
+				<ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MembershipTypes">
+            <EntityTypeMapping TypeName="db_SportsArenaModel.MembershipType">
+              <MappingFragment StoreEntitySet="MembershipType">
+                <ScalarProperty Name="MembershipTypeId" ColumnName="MembershipTypeId" />
+                <ScalarProperty Name="MembershipTypeName" ColumnName="MembershipTypeName" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="MembershipFees" ColumnName="MembershipFees" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Slots">
+            <EntityTypeMapping TypeName="db_SportsArenaModel.Slot">
+              <MappingFragment StoreEntitySet="Slot">
+                <ScalarProperty Name="SlotId" ColumnName="SlotId" />
+                <ScalarProperty Name="ArenaId" ColumnName="ArenaId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+				<ScalarProperty Name="AvailableCapacity" ColumnName="AvailableCapacity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Staffs">
+            <EntityTypeMapping TypeName="db_SportsArenaModel.Staff">
+              <MappingFragment StoreEntitySet="Staff">
+                <ScalarProperty Name="StaffId" ColumnName="StaffId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+                <ScalarProperty Name="WorkingStartTime" ColumnName="WorkingStartTime" />
+                <ScalarProperty Name="WorkingEndTime" ColumnName="WorkingEndTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="db_SportsArenaModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+				<ScalarProperty Name="IsApproved" ColumnName="IsApproved"/>
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="375d414508f343f999115198d503ac72" Name="Diagram1">
+        <EntityTypeShape EntityType="db_SportsArenaModel.Arena" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_SportsArenaModel.Booking" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_SportsArenaModel.Customer" Width="1.5" PointX="6" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_SportsArenaModel.MembershipType" Width="1.5" PointX="3.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_SportsArenaModel.Slot" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_SportsArenaModel.Staff" Width="1.5" PointX="3" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_SportsArenaModel.User" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
+        <AssociationConnector Association="db_SportsArenaModel.FK_Booking_Arena" ManuallyRouted="false" />
+        <AssociationConnector Association="db_SportsArenaModel.FK_Slot_Arena" ManuallyRouted="false" />
+        <AssociationConnector Association="db_SportsArenaModel.FK_Booking_Slot" ManuallyRouted="false" />
+        <AssociationConnector Association="db_SportsArenaModel.FK_Booking_User" ManuallyRouted="false" />
+        <AssociationConnector Association="db_SportsArenaModel.FK_Customer_MembershipType" ManuallyRouted="false" />
+        <AssociationConnector Association="db_SportsArenaModel.FK_Customer_User" ManuallyRouted="false" />
+        <AssociationConnector Association="db_SportsArenaModel.FK_Staff_UserId" ManuallyRouted="false" />
+      
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
